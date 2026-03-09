@@ -1,0 +1,556 @@
+.app-shell {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f5f7fb 0%, #eef2f8 100%);
+  color: #1f2937;
+  overflow-x: clip;
+}
+
+.top-nav {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(8px);
+  color: #fff;
+}
+
+.brand {
+  font-weight: 700;
+}
+
+.nav-toggle {
+  display: none;
+}
+
+.top-nav nav {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.profile-menu {
+  position: relative;
+}
+
+.profile-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+}
+
+.profile-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  display: inline-flex;
+}
+
+.profile-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.profile-popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.45rem);
+  min-width: 220px;
+  background: #ffffff;
+  color: #1f2937;
+  border-radius: 10px;
+  padding: 0.75rem;
+  border: 1px solid #dbe3ef;
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.15);
+  z-index: 20;
+}
+
+.profile-name,
+.profile-meta {
+  margin: 0;
+}
+
+.profile-name {
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.profile-meta {
+  font-size: 0.86rem;
+  color: #4b5563;
+}
+
+.profile-meta + .profile-meta {
+  margin-top: 0.2rem;
+}
+
+.profile-logout {
+  width: 100%;
+  margin-top: 0.65rem;
+}
+
+.page {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.07);
+  padding: 1.2rem;
+  min-width: 0;
+}
+
+.center {
+  text-align: center;
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 2rem;
+}
+
+.auth {
+  max-width: 460px;
+  margin: 2rem auto;
+}
+
+.stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.muted {
+  color: #64748b;
+}
+
+.actions,
+.actions-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.form-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.form-grid label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.inline-form input,
+.inline-form select {
+  min-width: 120px;
+}
+
+.ticket-create-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.ticket-create-heading {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ticket-create-heading h2,
+.ticket-create-heading p {
+  margin: 0;
+}
+
+.ticket-create-form {
+  display: grid;
+  gap: 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+  background: #f8fafc;
+}
+
+.ticket-create-form label {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.ticket-create-form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.7rem;
+}
+
+.ticket-create-form textarea {
+  font: inherit;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.65rem 0.7rem;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.ticket-create-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.split {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.8rem;
+}
+
+.stat-card {
+  background: #0f172a;
+  border-radius: 14px;
+  color: #fff;
+  padding: 1rem;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+}
+
+.stat-card h3 {
+  margin: 0.4rem 0 0;
+  font-size: 1.7rem;
+}
+
+.flash {
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+.flash.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.flash.error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.flash.info {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.error {
+  color: #dc2626; 
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.ticket-row {
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.ticket-row-resolved {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.ticket-row-in-progress {
+  background: #fffbeb;
+}
+
+.ticket-row-resolved td {
+  border-bottom-color: #e2e8f0;
+}
+
+.ticket-row-in-progress td {
+  border-bottom-color: #fde68a;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.8rem;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrap table {
+  min-width: 680px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.65rem;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.92rem;
+}
+
+
+.table-sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  padding: 0;
+  font-weight: 600;
+}
+
+.table-sort-button:hover {
+  opacity: 0.7;
+}
+
+.asset-row {
+  transition: background-color 0.2s ease;
+}
+
+.asset-row-available {
+  background: transparent;
+}
+
+.asset-row-assigned {
+  background: #ecfdf5;
+}
+
+.asset-row-maintenance {
+  background: #fff7ed;
+}
+
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge.available,
+.badge.ticket-resolved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.assigned,
+.badge.priority-medium,
+.badge.ticket-in-progress {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge.ticket-open,
+.badge.priority-low {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.badge.maintenance,
+.badge.priority-high {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+input,
+select,
+button {
+  font: inherit;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+}
+
+button {
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+button:hover {
+  opacity: 0.92;
+}
+
+button.secondary {
+  background: #334155;
+}
+
+button.ghost,
+button.link {
+  background: transparent;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+button.link {
+  color: #1d4ed8;
+  border: none;
+  padding: 0;
+}
+
+button.danger {
+  background: #dc2626;
+}
+
+.empty {
+  margin-top: 0.8rem;
+  color: #64748b;
+}
+
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 0.85rem 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    display: block;
+    font-size: 0.95rem;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    min-width: 2.4rem;
+    min-height: 2.4rem;
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+
+  .top-nav nav {
+    display: none;
+    width: 100%;
+    gap: 0.5rem;
+    padding-top: 0.35rem;
+  }
+
+  .top-nav nav.open {
+    display: flex;
+  }
+
+  .top-nav nav button {
+    flex: 1 1 100%;
+  }
+
+  .profile-menu {
+    flex: 1 1 100%;
+  }
+
+  .profile-menu > button {
+    width: 100%;
+  }
+
+  .profile-trigger {
+    width: 100%;
+  }
+
+  .profile-popover {
+    right: auto;
+    left: 0;
+  }
+
+  .page {
+    padding: 1rem 0.6rem 2rem;
+  }
+
+  .panel {
+    padding: 0.9rem;
+  }
+
+  .ticket-create-actions {
+    justify-content: stretch;
+  }
+
+  .ticket-create-actions button {
+    width: 100%;
+  }
+
+  th,
+  td {
+    padding: 0.45rem;
+    font-size: 0.82rem;
+  }
+}
+
+.asset-pending-updates {
+  border: 1px solid #dbeafe;
+  background: #eff6ff;
+  border-radius: 12px;
+  padding: 0.9rem;
+  margin-bottom: 0.9rem;
+}
+
+.asset-pending-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.asset-pending-header h3,
+.asset-pending-header p {
+  margin: 0;
+}
+
+.asset-pending-header p {
+  color: #334155;
+  font-size: 0.88rem;
+}
+
+.asset-pending-updates ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.asset-pending-updates li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border: 1px solid #bfdbfe;
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.65rem;
+}
+
+.asset-pending-updates li strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
