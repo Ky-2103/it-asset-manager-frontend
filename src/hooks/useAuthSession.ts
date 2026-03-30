@@ -11,6 +11,7 @@ function getInitialSessionState(): AuthSessionState {
   const token = localStorage.getItem('token')
 
   if (!token) {
+    // Defensive cleanup in case a previous session left stale user data behind.
     localStorage.removeItem('currentUser')
     return { token: null, currentUser: null }
   }
@@ -18,6 +19,7 @@ function getInitialSessionState(): AuthSessionState {
   const currentUser = getUserFromToken(token)
 
   if (!currentUser) {
+    // Expired or malformed tokens should never stay in storage.
     localStorage.removeItem('token')
     localStorage.removeItem('currentUser')
     return { token: null, currentUser: null }
