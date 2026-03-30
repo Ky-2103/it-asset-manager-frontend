@@ -31,7 +31,8 @@ export function RegisterPage({ onRegister, navigate }: Props) {
 
       event.currentTarget.reset()
     }catch (err: any) {
-      console.log('FULL ERROR:', err)
+      console.log('ERROR RESPONSE:', err?.response)
+      console.log('ERROR DATA:', err?.response?.data)
     
       const response = err?.response
     
