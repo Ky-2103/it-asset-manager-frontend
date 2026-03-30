@@ -3,8 +3,8 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 import { FlashMessage } from './components/FlashMessage'
 import { TopNav } from './components/TopNav'
-import { getActionErrorMessage } from './features/shared/errors'
 import { useAssets } from './hooks/useAssets'
+import { useAppHandlers } from './hooks/useAppHandlers'
 import { useBootstrapData } from './hooks/useBootstrapData'
 import { useAuthSession } from './hooks/useAuthSession'
 import { useFlash } from './hooks/useFlash'
@@ -17,7 +17,6 @@ import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { TicketsPage } from './pages/TicketsPage'
 import { UsersPage } from './pages/UsersPage'
-import type { Status } from './types/models'
 
 function App() {
   const navigate = useNavigate()
@@ -57,10 +56,26 @@ function App() {
     clearTicketState()
   }, [clearAssetState, clearTicketState])
 
-  function appNavigate(to: string, options?: { replace?: boolean }) {
-    navigate(to, { replace: options?.replace })
-    clearFlash()
-  }
+  const {
+    appNavigate,
+    handleLogin,
+    handleRegister,
+    handleLogout,
+    handleUpdateTicketStatus,
+    handleUpdateAsset,
+    handleDeleteAsset,
+  } = useAppHandlers({
+    navigate,
+    clearFlash,
+    showFlash,
+    login,
+    register,
+    logout,
+    clearProtectedState,
+    updateTicketStatus,
+    updateAsset,
+    removeAsset,
+  })
 
   useEffect(() => {
     replaceAssetsData(bootstrappedAssets, bootstrappedMyAssets)
@@ -79,71 +94,11 @@ function App() {
   useEffect(() => {
     if (!currentUser || !isAuthenticated) return
 
+    // Keep authenticated users away from public auth routes.
     if (route === '/' || route === '/login' || route === '/register') {
       navigate('/dashboard', { replace: true })
     }
   }, [currentUser, isAuthenticated, navigate, route])
-
-  async function handleLogin(credentials: { username: string; password: string }) {
-    const resolvedUser = await login(credentials)
-    appNavigate('/dashboard')
-    showFlash('success', `Welcome back, ${resolvedUser.username}.`)
-  }
-
-  async function handleRegister(payload: {
-    username: string
-    email: string
-    password: string
-    confirmPassword: string
-  }) {
-    await register(payload)
-    showFlash('success', 'Registration complete. You can now log in.')
-    appNavigate('/login')
-  }
-
-  function handleLogout() {
-    logout()
-    clearProtectedState()
-    appNavigate('/login')
-    showFlash('success', 'You have been logged out.')
-  }
-
-  async function handleUpdateTicketStatus(ticketId: number, status: 'Open' | 'In Progress' | 'Resolved') {
-    try {
-      await updateTicketStatus(ticketId, status)
-      showFlash('success', 'Ticket status updated.')
-    } catch (error) {
-      showFlash('error', getActionErrorMessage(error, 'Unable to update ticket.'))
-    }
-  }
-
-  async function handleUpdateAsset(assetId: number, payload: { status: Status; assigned_user_id: number | null }) {
-    if (payload.status === 'Assigned' && !payload.assigned_user_id) {
-      const message = 'assigned_user_id is required when status is Assigned.'
-      showFlash('error', message)
-      throw new Error(message)
-    }
-
-    try {
-      const updatedAsset = await updateAsset(assetId, payload)
-      showFlash('success', 'Asset updated.')
-      return updatedAsset
-    } catch (error) {
-      showFlash('error', getActionErrorMessage(error, 'Unable to update asset.'))
-      throw error
-    }
-  }
-
-  async function handleDeleteAsset(assetId: number) {
-    if (!window.confirm('Delete this asset? This action cannot be undone.')) return
-
-    try {
-      await removeAsset(assetId)
-      showFlash('success', 'Asset removed.')
-    } catch (error) {
-      showFlash('error', getActionErrorMessage(error, 'Unable to remove asset.'))
-    }
-  }
 
   return (
     <div className="app-shell">
