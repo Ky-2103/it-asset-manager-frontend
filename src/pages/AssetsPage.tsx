@@ -145,8 +145,8 @@ export function AssetsPage({
         return copy
       })
     } catch (error) {
-      console.error("Bulk update failed:", error)
-      // Keep drafts so user can retry
+      // Keep drafts so users can retry after resolving validation or backend errors.
+      showFlash('error', getActionErrorMessage(error, 'Unable to update selected assets.'))
     }
   }
 
