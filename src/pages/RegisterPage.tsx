@@ -31,41 +31,27 @@ export function RegisterPage({ onRegister, navigate }: Props) {
 
       event.currentTarget.reset()
     }catch (err: any) {
-      console.log('Registration error:', err)
-
-      const detail =
-        err?.response?.data?.detail || // Axios (FastAPI)
-        err?.data?.detail ||           // fallback shape
-        err?.detail ||                // direct throw
-        null
-
-      if (detail) {
+      console.log('FULL ERROR:', err)
+    
+      const response = err?.response
+    
+      if (response?.data?.detail) {
+        const detail = response.data.detail
+    
         if (Array.isArray(detail)) {
           const formatted = detail
             .map((d: any) => {
-              const field = d.loc?.[d.loc.length - 1]
-
-              const friendlyField =
-                field === 'username' ? 'Username' :
-                field === 'email' ? 'Email' :
-                field === 'password' ? 'Password' :
-                field === 'confirmPassword' ? 'Confirm Password' :
-                field
-
-              const message = d.msg
-                .replace('String should', 'must')
-                .replace('string', '')
-
-              return `${friendlyField} ${message}`
+              const field = d.loc?.[d.loc.length - 1] || 'Field'
+              return `${field}: ${d.msg}`
             })
             .join('. ')
-
+    
           setError(formatted)
         } else {
           setError(String(detail))
         }
       } else {
-        setError(err?.message || 'Registration failed')
+        setError(err.message || 'Registration failed')
       }
     } finally {
       setLoading(false)
