@@ -30,28 +30,44 @@ export function RegisterPage({ onRegister, navigate }: Props) {
       })
 
       event.currentTarget.reset()
-    } catch (err: any) {
-      if (err?.response?.data?.detail) {
-        const details = err.response.data.detail
-    
-        // If it's an array (FastAPI validation errors)
-        if (Array.isArray(details)) {
-          const formatted = details
+    }catch (err: any) {
+      console.log('Registration error:', err)
+
+      const detail =
+        err?.response?.data?.detail || // Axios (FastAPI)
+        err?.data?.detail ||           // fallback shape
+        err?.detail ||                // direct throw
+        null
+
+      if (detail) {
+        if (Array.isArray(detail)) {
+          const formatted = detail
             .map((d: any) => {
-              const field = d.loc?.[d.loc.length - 1] // gets "username"
-              return `${field}: ${d.msg}`
+              const field = d.loc?.[d.loc.length - 1]
+
+              const friendlyField =
+                field === 'username' ? 'Username' :
+                field === 'email' ? 'Email' :
+                field === 'password' ? 'Password' :
+                field === 'confirmPassword' ? 'Confirm Password' :
+                field
+
+              const message = d.msg
+                .replace('String should', 'must')
+                .replace('string', '')
+
+              return `${friendlyField} ${message}`
             })
-            .join(', ')
-    
+            .join('. ')
+
           setError(formatted)
         } else {
-          // fallback if detail is just a string
-          setError(details)
+          setError(String(detail))
         }
       } else {
-        setError('Registration failed')
+        setError(err?.message || 'Registration failed')
       }
-    }finally {
+    } finally {
       setLoading(false)
     }
   }
