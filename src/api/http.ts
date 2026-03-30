@@ -6,8 +6,43 @@ function resolveApiBaseUrl() {
   return import.meta.env?.VITE_API_BASE_URL ?? ''
 }
 
-
 export const API_BASE_URL = resolveApiBaseUrl()
+
+type ApiErrorDetail = {
+  loc?: Array<string | number>
+  msg?: string
+}
+
+type ApiErrorBody = {
+  detail?: string | ApiErrorDetail[]
+  message?: string
+  error?: string
+}
+
+function formatApiDetail(detail: string | ApiErrorDetail[]): string {
+  if (typeof detail === 'string') return detail
+
+  const messages = detail
+    .map((item) => {
+      if (!item?.msg) return null
+
+      const fieldPath = item.loc?.slice(1).join('.')
+      return fieldPath ? `${fieldPath}: ${item.msg}` : item.msg
+    })
+    .filter((message): message is string => Boolean(message))
+
+  return messages.join(' | ')
+}
+
+function getApiErrorMessage(rawBody: string, fallbackMessage: string): string {
+  try {
+    const errorData = JSON.parse(rawBody) as ApiErrorBody
+    const detailMessage = errorData.detail ? formatApiDetail(errorData.detail) : ''
+    return detailMessage || errorData.message || errorData.error || fallbackMessage
+  } catch {
+    return fallbackMessage
+  }
+}
 
 export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
   const token = localStorage.getItem('token')
@@ -37,28 +72,21 @@ export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T
     throw new Error('UNAUTHORIZED')
   }
   if (!response.ok) {
+    // Keep a safe fallback for cases where the backend sends an empty body.
     const fallbackMessage = `Request failed with status ${response.status}`
-  
     const contentType = response.headers.get('content-type')?.toLowerCase() ?? ''
     const rawBody = await response.text()
-  
-    // If it's JSON, try to pull a message out
+
+    // Parse structured error payloads (for example FastAPI validation errors).
     if (rawBody.trim() && contentType.includes('json')) {
-      try {
-        const errorData = JSON.parse(rawBody) as { detail?: string; message?: string }
-        throw new Error(errorData.detail || errorData.message || fallbackMessage)
-      } catch {
-        // body existed but wasn't valid JSON
-        throw new Error(fallbackMessage)
-      }
+      throw new Error(getApiErrorMessage(rawBody, fallbackMessage))
     }
-  
-    // If it's not JSON but has some text, return it as the message
+
+    // If it's plain text, surface it directly so the UI shows the backend message.
     if (rawBody.trim() && !contentType.includes('json')) {
       throw new Error(rawBody)
     }
-  
-    // Empty body
+
     throw new Error(fallbackMessage)
   }
 
