@@ -30,9 +30,28 @@ export function RegisterPage({ onRegister, navigate }: Props) {
       })
 
       event.currentTarget.reset()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed')
-    } finally {
+    } catch (err: any) {
+      if (err?.response?.data?.detail) {
+        const details = err.response.data.detail
+    
+        // If it's an array (FastAPI validation errors)
+        if (Array.isArray(details)) {
+          const formatted = details
+            .map((d: any) => {
+              const field = d.loc?.[d.loc.length - 1] // gets "username"
+              return `${field}: ${d.msg}`
+            })
+            .join(', ')
+    
+          setError(formatted)
+        } else {
+          // fallback if detail is just a string
+          setError(details)
+        }
+      } else {
+        setError('Registration failed')
+      }
+    }finally {
       setLoading(false)
     }
   }
